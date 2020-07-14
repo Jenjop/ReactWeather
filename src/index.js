@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+var zip = '92130'
+var api_key = '40b84f4171d173d01d8b03a7f4c83159'
 
 
 
@@ -42,25 +44,6 @@ class Date extends React.Component{
 }
 class Panels extends React.Component {
 
-	// componentDidMount(){
-	// 	fetch("https://api.weather.gov/gridpoints/SGX/55,23/forecast")
-	// 		.then(res => res.json())
-	// 		.then(
-	// 			(results) => {
-	// 				this.setState({
-	// 					isLoaded: true,
-	// 					items: results.items
-	// 				});
-	// 			},
-	// 			(error) => {
-	// 				this.setState({
-	// 					isLoaded: true,
-	// 					error
-	// 			});
-	// 		}
-	// 	)
-	// }
-
 	render(){
 		return(
 			<div className='mainPanel'>
@@ -79,7 +62,40 @@ class Panels extends React.Component {
 class Weather extends React.Component {
 	constructor(props){
 		super(props);
+		this.state = {
+			error: null,
+			isLoaded: false,
+			items: []
+		};
 	}
+
+
+	componentDidMount() {
+		this.getWeather();
+	}
+// 'https://api.openweathermap.org/data/2.5/forecast?zip=92130&appid=40b84f4171d173d01d8b03a7f4c83159'
+// 'https://api.openweathermap.org/data/2.5/forecast?zip='+ zip + '&appid=' + api_key
+// Backup: "https://api.weather.gov/gridpoints/SGX/55,23/forecast"
+
+	getWeather(){
+		fetch('https://api.openweathermap.org/data/2.5/forecast?zip='+ zip + '&appid=' + api_key)
+		.then(res => res.json())
+		.then(
+			(result) => {
+				this.setState({
+					isLoaded: true,
+					result: result
+				});
+			},
+			(error) => {
+				this.setState({
+					isLoaded: true,
+					error
+				});
+			}
+		)
+	}
+
 	render(){
 		return(
 			<Panels />
